@@ -1,5 +1,6 @@
 package leetcode410;
 
+import java.util.HashMap;
 import java.util.LinkedList;
 
 public class Leetcode402 {
