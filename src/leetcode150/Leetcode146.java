@@ -193,4 +193,96 @@ public class Leetcode146 {
     }
 
 
+    static class LRUCache2<K, V> {
+        //lru算法的容量,存储的数据不能大于这个值
+        //>0 表示容量
+        //<0 表示不限制容量
+        private int capacity;
+        //缓存内容
+        private HashMap<K, Node<K, V>> cache;
+        //头部节点之前的虚拟节点
+        private Node<K, V> preFirst;
+        //尾部节点之后的虚拟节点
+        private Node<K, V> tail;
+
+        public LRUCache2(int capacity) {
+            this.capacity = capacity;
+            cache = new HashMap<>();
+            preFirst = new Node<>(null, null);
+            tail = new Node<>(null, null);
+            preFirst.next = tail;
+            tail.pre = preFirst;
+        }
+
+        public V get(K key) {
+            Node<K, V> node = cache.get(key);
+            if (null == node) return null;
+            moveToLast(node);
+            return node.val;
+        }
+
+        public void put(K key, V val) {
+            if (!cache.containsKey(key) && capacity > 0 && cache.size() >= capacity) {
+                deleteFirst();
+            }
+            Node<K, V> kvNode = cache.get(key);
+            if (kvNode == null) {
+                kvNode = new Node<>(key, val);
+            } else {
+                kvNode.val = val;
+            }
+            moveToLast(kvNode);
+            cache.put(key, kvNode);
+        }
+
+        //移动节点到尾部
+        private void moveToLast(Node<K, V> node) {
+            //从原节点中移除
+            Node<K, V> preSrc = node.pre;
+            Node<K, V> nextSrc = node.next;
+            if (preSrc != null) preSrc.next = nextSrc;
+            if (nextSrc != null) nextSrc.pre = preSrc;
+            //移动到最后节点
+            Node<K, V> targetPre = tail.pre;
+            if (targetPre != null) targetPre.next = node;
+            node.pre = targetPre;
+            node.next = tail;
+            tail.pre = node;
+        }
+
+        //删除头节点
+        private void deleteFirst() {
+            Node<K, V> removeFirstNode = preFirst.next;
+            if (removeFirstNode != null && removeFirstNode != tail) {
+                if (removeFirstNode.key != null)
+                    cache.remove(removeFirstNode.key);
+                removeFirstNode.pre = null;
+                Node<K, V> newFirst = removeFirstNode.next;
+                removeFirstNode.next = null;
+                preFirst.next = newFirst;
+                newFirst.pre = preFirst;
+            }
+        }
+
+        /**
+         * LRU存储值使用的节点
+         *
+         * @param <K>
+         * @param <V>
+         */
+        private static class Node<K, V> {
+            private K key;
+            private V val;
+
+            private Node<K, V> pre;
+            private Node<K, V> next;
+
+            private Node(K key, V val) {
+                this.key = key;
+                this.val = val;
+            }
+        }
+
+    }
+
 }
