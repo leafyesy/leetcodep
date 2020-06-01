@@ -1,5 +1,6 @@
-<<<<<<< HEAD
 package src.utils;
+
+import src.base.ListNode;
 
 import java.util.List;
 
@@ -13,12 +14,22 @@ public class Utils {
             count++;
             if (count < list.size())
                 System.out.print(",");
-=======
-package utils;
+        }
+        System.out.println("]");
+    }
 
-import base.ListNode;
+    public static void printIntArr(int[] arr) {
+        System.out.print("[");
+        int count = 0;
+        for (int elem : arr) {
+            System.out.print("" + elem);
+            count++;
+            if (count < arr.length)
+                System.out.print(",");
+        }
+        System.out.println("]");
+    }
 
-public class Utils {
 
     public static void printNode(ListNode node) {
         System.out.print("[");
@@ -31,14 +42,10 @@ public class Utils {
             } else {
                 break;
             }
->>>>>>> ec6d562e6fd2ebc6794c6f63382ab80eb6b37342
         }
         System.out.println("]");
     }
 
-<<<<<<< HEAD
-
-=======
     public static ListNode deleteCenterNode(ListNode node) {
         ListNode last = node;
         ListNode deletePre = null;
@@ -56,6 +63,4 @@ public class Utils {
         deletePre.next = deletePre.next.next;
         return node;
     }
->>>>>>> ec6d562e6fd2ebc6794c6f63382ab80eb6b37342
-
 }
