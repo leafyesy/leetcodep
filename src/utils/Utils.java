@@ -30,6 +30,18 @@ public class Utils {
         System.out.println("]");
     }
 
+    public static void printCharArr(char[] arr) {
+        System.out.print("[");
+        int count = 0;
+        for (char elem : arr) {
+            System.out.print("" + elem);
+            count++;
+            if (count < arr.length)
+                System.out.print(",");
+        }
+        System.out.println("]");
+    }
+
 
     public static void printNode(ListNode node) {
         System.out.print("[");
@@ -63,4 +75,38 @@ public class Utils {
         deletePre.next = deletePre.next.next;
         return node;
     }
+
+    public static ListNode createListNode(int[] arr) {
+        if (arr.length == 0) return null;
+        ListNode head = new ListNode(arr[0]);
+        ListNode cur = head;
+        for (int i = 1; i < arr.length; i++) {
+            ListNode node = new ListNode(arr[i]);
+            cur.next = node;
+            cur = node;
+        }
+        return head;
+    }
+
+    public static ListNode getListNodeByIndex(ListNode head, int index) {
+        if (index < 0) return null;
+        int count = index;
+        ListNode cur = head;
+        while (count > 0) {
+            cur = cur.next;
+            count--;
+        }
+        return cur;
+    }
+
+    public static ListNode getLastListNode(ListNode head) {
+        if (head == null) return null;
+        ListNode cur = head;
+        while (cur.next != null) {
+            cur = cur.next;
+        }
+        return cur;
+    }
+
+
 }
