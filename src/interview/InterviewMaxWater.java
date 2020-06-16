@@ -1,5 +1,10 @@
 package src.interview;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.List;
+
 public class InterviewMaxWater {
 
     public static void main(String[] args){
@@ -21,6 +26,8 @@ public class InterviewMaxWater {
                 newResult = nums[right] * (right - left);
                 right--;
             }
+            List<Integer> list = new ArrayList<>();
+            Collections.reverse(list);
             if (newResult > result) {
                 result = newResult;
             }
