@@ -73,6 +73,42 @@ public class LeetCode108 {
         return root;
     }
 
+
+    private TreeNode sortedArrayToBSTHelper3(int[] nums) {
+        int length = nums.length;
+        int arrMid = length / 2;
+        TreeNode root = new TreeNode(nums[arrMid]);
+        Deque<TreeInfo> deque = new ArrayDeque<>();
+        TreeInfo rootInfo = new TreeInfo(0, length, arrMid, root);
+        deque.add(rootInfo);
+        while (!deque.isEmpty()) {
+            TreeInfo pop = deque.pop();
+            int left = pop.left;
+            int right = pop.right;
+            int innerMid = pop.mid;
+            if (left == innerMid && right - 1 <= innerMid) {
+                //表示没有子节点了
+                continue;
+            }
+            TreeNode node = pop.node;
+            if (left < innerMid) {
+                int leftMid = (left + innerMid) / 2;
+                TreeNode leftNode = new TreeNode(nums[leftMid]);
+                node.left = leftNode;
+                TreeInfo leftInfo = new TreeInfo(left, innerMid, leftMid, leftNode);
+                deque.add(leftInfo);
+            }
+            if (innerMid < right - 1) {
+                int rightMid = (innerMid + 1 + right) / 2;
+                TreeNode rightNode = new TreeNode(nums[rightMid]);
+                node.right = rightNode;
+                TreeInfo rightInfo = new TreeInfo(innerMid + 1, right, rightMid, rightNode);
+                deque.add(rightInfo);
+            }
+        }
+        return root;
+    }
+
     private class TreeInfo {
         int left;
         int right;

@@ -42,12 +42,27 @@ public class Utils {
         System.out.println("]");
     }
 
+    public static void printCharArr(Character[] arr) {
+        System.out.print("[");
+        int count = 0;
+        for (Character elem : arr) {
+            System.out.print("" + elem);
+            count++;
+            if (count < arr.length)
+                System.out.print(",");
+        }
+        System.out.println("]");
+    }
+
 
     public static void printNode(ListNode node) {
         System.out.print("[");
         ListNode cur = node;
         while (true) {
-            System.out.print(cur.val + "");
+            System.out.print((cur == null ? -1 : cur.val) + "");
+            if (cur == null) {
+                break;
+            }
             if (cur.next != null) {
                 System.out.print(",");
                 cur = cur.next;

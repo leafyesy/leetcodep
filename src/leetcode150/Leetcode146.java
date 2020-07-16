@@ -22,6 +22,149 @@ public class Leetcode146 {
     }
 
 
+    static class LRUCache3<K, V> {
+
+        private static final int DEF_CAPACITY = 10;
+
+        /**
+         * 存储使用的节点
+         */
+        private class Node {
+
+            private final K key;
+
+            private V value;
+
+            private Node pre;
+
+            private Node next;
+
+            private Node(K k, V v) {
+                this.key = k;
+                this.value = v;
+            }
+
+        }
+
+        /**
+         * 容量
+         */
+        private final int capacity;
+
+        private final HashMap<K, Node> cache;
+
+        private final Node first;//头节点前面那个节点
+
+        private final Node tail;//尾节点后面那个节点
+
+        public LRUCache3() {
+            this(DEF_CAPACITY);
+        }
+
+        public LRUCache3(int capacity) {
+            this.capacity = capacity;
+            cache = new HashMap<>();
+            first = new Node(null, null);
+            tail = new Node(null, null);
+            first.next = tail;
+            tail.pre = first;
+        }
+
+        /**
+         * 存入
+         * 这种是修改不改变位置
+         *
+         * @param k
+         * @param v
+         */
+        public void put(K k, V v) {
+            Node node = cache.get(k);
+            if (node == null) {
+                if (cache.size() >= capacity) {//移除尾巴
+                    removeTail();
+                }
+                node = new Node(k, v);
+                insertNodeNext(node, first);
+            } else {
+                node.value = v;
+            }
+            cache.put(k, node);
+        }
+
+        /**
+         * 取出
+         *
+         * @param k
+         * @return
+         */
+        public V get(K k) {
+            Node node = cache.get(k);
+            connectNodePreNext(node);
+            insertNodeNext(node, first);
+            return node == null ? null : node.value;
+        }
+
+
+        public void remove(K k) {
+            Node node = cache.get(k);
+            connectNodePreNext(node);
+            if (node != null) {
+                cache.remove(node.key);
+            }
+        }
+
+        /**
+         * 移除尾巴前的一个节点
+         */
+        private void removeTail() {
+            Node pre = tail.pre;
+            if (pre != first) {
+                remove(pre.key);
+            }
+        }
+
+        /**
+         * 把node前后节点连接起来
+         *
+         * @param node
+         */
+        private void connectNodePreNext(Node node) {
+            if (node == null) return;
+            Node pre = node.pre;
+            Node next = node.next;
+            pre.next = next;
+            next.pre = pre;
+            node.pre = null;
+            node.next = null;
+        }
+
+        /**
+         * 插入到某个节点的下一个
+         */
+        private void insertNodeNext(Node node, Node insert) {
+            if (node == null) return;
+            Node fNext = insert.next;
+            insert.next = node;
+            node.pre = insert;
+            node.next = fNext;
+            fNext.pre = node;
+        }
+
+        /**
+         * 插入到链表中
+         */
+        private void insertFirst(Node node) {
+            Node fNext = first.next;
+            first.next = node;
+            node.pre = first;
+            node.next = fNext;
+            fNext.pre = node;
+        }
+
+
+    }
+
+
     static class LRUCacheImp<K, V> {
 
         private int capacity;

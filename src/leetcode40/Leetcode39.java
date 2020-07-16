@@ -1,23 +1,76 @@
 package leetcode40;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import src.utils.Utils;
+
+import java.util.*;
 
 public class Leetcode39 {
 
     public static void main(String[] args) {
-        int[] ints = {2, 3, 5};
-        List<List<Integer>> lists = combinationSum(ints, 8);
+        int[] ints = {8, 7, 4, 3};
+        List<List<Integer>> lists = combinationSum2(ints, 11);
         System.out.println("[");
         for (List<Integer> list : lists) {
-            System.out.print("[");
-            for (Integer integer : list) {
-                System.out.print("" + integer + ",");
-            }
-            System.out.println("],");
+            Utils.printList(list);
         }
-        System.out.println("]");
+    }
+
+
+    public static List<List<Integer>> combinationSum2(int[] candidates, int target) {
+        List<List<Integer>> result = new ArrayList<>();
+        if (candidates == null || candidates.length == 0) {
+            return result;
+        }
+        Arrays.sort(candidates);
+        Item[] dp = new Item[target + 1];
+        for (int i = 0; i < dp.length; i++) {
+            dp[i] = new Item();
+        }
+        for (int i = 1; i <= target; i++) {
+            for (int candidate : candidates) {
+                int temp = 0;
+                while (true) {
+                    int newValue = temp + candidate;
+                    System.out.println(">>temp:" + temp + " candidate:" + candidate + " newValue:" + newValue);
+                    if (newValue == i) {
+                        System.out.println("temp:" + temp + " candidate:" + candidate + " newValue:" + newValue);
+                        addToResult(dp, i, i - candidate, candidate);
+                        temp = newValue;
+                        continue;
+                    }
+                    break;
+                }
+            }
+        }
+        Set<Integer> set = new HashSet<>();
+        Collections.sort(new ArrayList<>(set));
+        System.out.println("-----------------------------");
+        for (Item item : dp) {
+            Utils.printList(item.list);
+        }
+        System.out.println("-----------------------------");
+        return dp[target].list;
+    }
+
+    private static void addToResult(Item[] dp, int target, int pre, int candidate) {
+        System.out.println("target:" + target + " pre:" + pre);
+        Item targetItem = dp[target];
+        Item preItem = dp[pre];
+        if (preItem.list.isEmpty() || targetItem == preItem) {
+            List<Integer> list = new ArrayList<>();
+            list.add(candidate);
+            targetItem.list.add(list);
+        } else {
+            for (List<Integer> intList : preItem.list) {
+                List<Integer> list = new ArrayList<>(intList);
+                list.add(candidate);
+                targetItem.list.add(list);
+            }
+        }
+    }
+
+    static class Item {
+        List<List<Integer>> list = new ArrayList<>();
     }
 
 

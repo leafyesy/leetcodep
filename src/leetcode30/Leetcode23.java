@@ -24,6 +24,9 @@ public class Leetcode23 {
         }
     }
 
+
+
+
     static class Solution {
 
         public ListNode mergeKLists(ListNode[] lists) {
