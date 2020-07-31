@@ -2,34 +2,110 @@ package src.leetcode10;
 
 import src.utils.Utils;
 
-public class Leetcode4 {
+import java.util.*;
 
+public class Leetcode4 {
     public static void main(String[] args) {
-        int[] nums1 = new int[]{1, 3, 5, 6, 7, 8, 9};
-        int[] nums2 = new int[]{2};
-        double result = findMedianSortedArrays(nums2, nums1);
-        System.out.println("result:" + result);
+        int[] arr2 = new int[]{5, 6, 7, 8, 9, 10};
+        int[] arr1 = new int[]{1, 2, 3, 4};
+        List<List<Integer>> lists = combinationSum(arr1, 4);
+        for (List<Integer> list : lists) {
+            Utils.printList(list);
+        }
+
+//        double result;
+//        result = findMedianSortedArrays(arr2, arr1);
+//        System.out.println("result:" + result);
     }
+
+    public int hammingDistance(int m, int n) {
+        int count = 0;
+        int tempM = m;
+        int tempN = n;
+        while (tempM != tempN) {
+            if ((tempM & 0x1) == (tempN & 0x1)) {
+                count++;
+            }
+            tempM = tempM >> 1;
+            tempN = tempN >> 1;
+        }
+        int i = 0b1111;
+        return count;
+    }
+
+    public static List<List<Integer>> combinationSum(int[] candidates, int target) {
+        List<List<Integer>> result = new ArrayList<>();
+        if (candidates == null || candidates.length == 0) {
+            return result;
+        }
+        Arrays.sort(candidates);
+        if (target < candidates[0]) {
+            return result;
+        }
+        Item[] dp = new Item[target + 1];
+        for (int k = 0; k < dp.length; k++) {
+            dp[k] = new Item();
+        }
+        for (int v = 1; v <= target; v++) {
+            for (int candidate : candidates) {
+                if (candidate == v) {
+                    List<Integer> list = new ArrayList<>();
+                    list.add(candidate);
+                    dp[v].set.add(list);
+                    //dp[v].list.add(list);
+                } else if (candidate < v) {
+                    if (!dp[v - candidate].set.isEmpty()) {
+                        Item preItem = dp[v - candidate];
+                        for (List<Integer> list : preItem.set) {
+                            List<Integer> newList = new ArrayList<>(list);
+                            newList.add(candidate);
+                            Collections.sort(newList);
+                            dp[v].set.add(newList);
+                        }
+                    }
+                    continue;
+                }
+                break;
+            }
+        }
+        return new ArrayList<>(dp[target].set);
+    }
+
+    static class Item {
+        Set<List<Integer>> set = new HashSet<>();
+    }
+
 
     public static double findMedianSortedArrays(int[] nums1, int[] nums2) {
-        return find(nums1, nums2);
+        return arraySplit(nums1, nums2);
     }
 
-    private static double find(int[] nums1, int[] nums2) {
+    private static double getMiddleArr(int[] arr) {
+        int i = arr.length & 1;
+        if (i == 0) {
+            return (arr[arr.length / 2] + arr[arr.length / 2 - 1]) / 2.0;
+        } else {
+            return arr[arr.length / 2];
+        }
+    }
+
+    private static double arraySplit(int[] nums1, int[] nums2) {
         int length1 = nums1.length;
         int length2 = nums2.length;
         if (length1 == 0 && length2 == 0) {
             return 0;
         } else if (length1 == 0) {
-            return findMedian(nums2);
+            return getMiddleArr(nums2);
         } else if (length2 == 0) {
-            return findMedian(nums1);
+            return getMiddleArr(nums1);
         }
         if (length1 < length2) {
-            return find(nums2, nums1);
+            return arraySplit(nums2, nums1);
         }
+
+        System.out.println("length1:" + length1 + " length2:" + length2);
         int left = 0;
-        int right = length1 - 1;
+        int right = length1;
         int leftMax = 0;
         int rightMin = 0;
         int leftSize = 0;
@@ -147,4 +223,5 @@ public class Leetcode4 {
             arr[left + tempIndex++] = i;
         }
     }
+
 }
