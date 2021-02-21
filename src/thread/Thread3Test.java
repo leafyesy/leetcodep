@@ -1,5 +1,8 @@
 package src.thread;
 
+import src.base.TreeNode;
+
+import java.util.Stack;
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.ReentrantLock;
 import java.util.function.IntConsumer;
@@ -303,5 +306,19 @@ public class Thread3Test {
         }
     }
 
-
-}
+//    public static void midOrder(TreeNode biTree) {//中序遍历费递归实现
+//        Stack<TreeNode> stack = new Stack<TreeNode>();
+//        while (biTree != null || !stack.isEmpty()) {
+//            while (biTree != null) {
+//                stack.push(biTree);
+//                biTree = biTree.left;
+//            }
+//            if (!stack.isEmpty()) {
+//                biTree = stack.pop();
+//                System.out.println(biTree.val);
+//                biTree = biTree.right;
+//            }
+//        }
+//
+//
+    }

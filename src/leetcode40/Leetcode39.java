@@ -10,6 +10,10 @@ public class Leetcode39 {
         int[] ints = {8, 7, 4, 3};
         List<List<Integer>> lists = combinationSum2(ints, 11);
         System.out.println("[");
+        int n = 4096;
+        int i = n & 0x55555555;
+        System.out.println("" + i);
+
         for (List<Integer> list : lists) {
             Utils.printList(list);
         }

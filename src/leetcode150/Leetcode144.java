@@ -3,9 +3,7 @@ package src.leetcode150;
 import src.base.TreeNode;
 import src.utils.Utils;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Stack;
+import java.util.*;
 
 public class Leetcode144 {
 
@@ -16,7 +14,7 @@ public class Leetcode144 {
         List<Integer> list = preorderTraversal(node);
         Utils.printList(list);
 
-        List<Integer> list1 = preorderTraversal1(node);
+        List<Integer> list1 = after(node);
         Utils.printList(list1);
     }
 
@@ -33,6 +31,48 @@ public class Leetcode144 {
         if (root.right != null)
             proorderTraversalDigui(root.right, list);
     }
+
+
+    public static List<Integer> afterorderTraversal(TreeNode root) {
+        List<Integer> list = new ArrayList<>();
+        Stack<TreeNode> stack = new Stack<>();
+        TreeNode cur = root;
+        while (cur != null) {
+            list.add(cur.val);
+            stack.add(cur);
+            cur = cur.right;
+            while (cur == null && !stack.empty()) {
+                cur = stack.pop().left;
+            }
+        }
+        return list;
+    }
+
+    public static List<Integer> after(TreeNode root) {
+        List<Integer> list = new ArrayList<>();
+        Deque<TreeNode> stack = new LinkedList<>();
+        TreeNode cur = root;
+        TreeNode pre = null;
+        while (cur != null || !stack.isEmpty()) {
+            while (cur != null) {
+                stack.push(cur);
+                cur = cur.left;
+            }
+            cur = stack.pop();
+            if (cur.right == null || cur.right == pre) {
+                list.add(cur.val);
+                pre = cur;
+                cur = null;
+            } else {
+                stack.push(cur);
+                cur = cur.right;
+            }
+//            list.add(cur.val);
+//            cur = cur.left;
+        }
+        return list;
+    }
+
 
     public static List<Integer> preorderTraversal2(TreeNode root) {
         List<Integer> list = new ArrayList<>();
