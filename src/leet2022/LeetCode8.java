@@ -4,9 +4,112 @@ public class LeetCode8 {
 
     public static void main(String[] args) {
         //2147483647
-        int i = new LeetCode8().myAtoi("1095502006p8");
+        //int i = new LeetCode8().myAtoi2("    -1111111111");
+        //int i = new LeetCode8().myAtoi2("00000-42a1234");
+        //int i = new LeetCode8().myAtoi2("   +0 123");
+        int i = new LeetCode8().myAtoi3("2147483648");
         System.out.println("result:" + i);
     }
+
+    public int myAtoi3(String s) {
+        String realS = s.trim();
+        if (realS.length() == 0) {
+            return 0;
+        }
+        char firstC = realS.charAt(0);
+        if (firstC != '-' && firstC != '+' && !Character.isDigit(firstC)) {
+            return 0;
+        }
+        boolean isNegativeNum = firstC == '-';
+        boolean isFirstDigit = Character.isDigit(firstC);
+        int result = 0;
+        int tmp = isNegativeNum ? (-(Integer.MIN_VALUE / 10)) : Integer.MAX_VALUE / 10;
+        int last = isNegativeNum ? (-(Integer.MIN_VALUE % 10)) : Integer.MAX_VALUE % 10;
+        for (int i = isFirstDigit ? 0 : 1; i < realS.length(); i++) {
+            if (!Character.isDigit(realS.charAt(i))) {
+                break;
+            }
+            int next = realS.charAt(i) - '0';
+            if (result > tmp || (result == tmp && next > last)) {
+                return isNegativeNum ? Integer.MIN_VALUE : Integer.MAX_VALUE;
+            }
+            result = result * 10 + next;
+        }
+        return isNegativeNum ? -result : result;
+    }
+
+    public int myAtoi2(String s) {
+        int sign = 0;// -2 表示没有找到符号位 -1 表示负数 1 表示正数
+        int zero = -1;// 第一个zero出现的位置
+        int start = -1;// 开始真正计数的位置
+        int result = 0;// 结果
+        for (int i = 0; i < s.length(); i++) {
+            char c = s.charAt(i);
+            if (c == ' ') {
+                if (start >= 0 || zero >= 0 || sign != 0) {
+                    break;
+                }
+                continue;
+            } else if (c == '+' || c == '-') {
+                if (start >= 0 || sign != 0) {
+                    break;
+                }
+                sign = c == '+' ? 1 : -1;
+                continue;
+            } else if (c == '0' && start == -1) {
+                if (sign == 0) {
+                    sign = 1;
+                }
+                zero = i;
+                continue;
+            } else if (c > '9' || c < '0') {
+                break;
+            }
+            // 处理正确的数字
+            if (start == -1) {
+                start = i;
+            }
+            // 处理溢出情况
+            int overResult = checkWillOver(sign, start, result, i, c);
+            if (overResult == -1) {
+                result = result * 10 + (c - '0');
+            } else {
+                return overResult;
+            }
+        }
+        return sign == -1 ? -result : result;
+    }
+
+    private int checkWillOver(int sign, int start, int result, int i, char c) {
+        if (i - start + 1 > 10) {
+            if (sign == -1) {
+                return Integer.MIN_VALUE;
+            } else {
+                return Integer.MAX_VALUE;
+            }
+        } else if (i - start + 1 == 10) {
+            if (sign == -1) {
+                if (-result < Integer.MIN_VALUE / 10) {
+                    return Integer.MIN_VALUE;
+                } else if (-result == Integer.MIN_VALUE / 10) {
+                    if ((c - '0') > (-(Integer.MIN_VALUE % 10))) {
+                        return Integer.MIN_VALUE;
+                    }
+                }
+            } else {
+                if (result > Integer.MAX_VALUE / 10) {
+                    return Integer.MAX_VALUE;
+                }
+                if (result == Integer.MAX_VALUE / 10) {
+                    if ((c - '0') > Integer.MAX_VALUE % 10) {
+                        return Integer.MAX_VALUE;
+                    }
+                }
+            }
+        }
+        return -1;
+    }
+
 
     public int myAtoi(String s) {
         // 1.filter valid string
