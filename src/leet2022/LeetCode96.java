@@ -38,7 +38,7 @@ public class LeetCode96 {
         if (n == 1) {
             return 1;
         }
-        if (arr[n -1] != -1) {
+        if (arr[n - 1] != -1) {
             return arr[n - 1];
         }
         int count = 0;
@@ -47,6 +47,22 @@ public class LeetCode96 {
         }
         arr[n - 1] = count;
         return count;
+    }
+
+
+    int[] resultArr;
+
+    public int numTrees2(int n) {
+        if (n == 0 || n == 1) return 0;
+        resultArr = new int[n + 1];
+        resultArr[0] = 1;
+        resultArr[1] = 1;
+        for (int i = 2; i <= n; i++) { // 逐步增加i
+            for (int j = 1; j < i + 1; j++) {
+                resultArr[i] += resultArr[j - 1] * resultArr[i - j];
+            }
+        }
+        return resultArr[n];
     }
 
 }
