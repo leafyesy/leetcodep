@@ -2,7 +2,7 @@ package src.leet2022;
 
 public class LeetCode215 {
 
-    public static void main(String[] args) {
+    public static void main1(String[] args) {
         int[] arr = {3, 2, 1, 5, 6, 4};
         //int[] arr = {3, 2, 3, 1, 2, 4, 5, 5, 6};
 //        int[] arr = {3, 2, 3, 1, 2, 4, 5, 5, 6, 7, 7, 8, 2, 3, 1, 1, 1, 10, 11, 5, 6, 2, 4, 7, 8, 5, 6};
@@ -127,6 +127,71 @@ public class LeetCode215 {
         arr[left] = key;
         innerFastSort(arr, start, left - 1);
         innerFastSort(arr, left + 1, end);
+    }
+
+    public static void main(String[] args) {
+//        int[] arr = {3, 2, 1, 5, 6, 4};
+        //int[] arr = {3, 2, 3, 1, 2, 4, 5, 5, 6};
+        int[] arr = {3, 2, 3, 1, 2, 4, 5, 5, 6, 7, 7, 8, 2, 3, 1, 1, 1, 10, 11, 5, 6, 2, 4, 7, 8, 5, 6};
+        //new LeetCode215().quickSort2(arr, 0, arr.length - 1);
+        new LeetCode215().maxHeadSort(arr);
+        for (int i : arr) {
+            System.out.println(">" + i);
+        }
+    }
+
+
+    private void quickSort2(int[] arr, int start, int end) {
+        if (start >= end) {
+            return;
+        }
+        int key = arr[start];
+        int left = start;
+        int right = end;
+        while (left < right) {
+            while (left < right && arr[right] >= key) {
+                right--;
+            }
+            if (left < right) {
+                arr[left] = arr[right];
+            }
+            while (left < right && arr[left] < key) {
+                left++;
+            }
+            if (left < right) {
+                arr[right] = arr[left];
+            }
+        }
+        arr[left] = key;
+        quickSort2(arr, start, left - 1);
+        quickSort2(arr, left + 1, end);
+    }
+
+    private void maxHeadSort(int[] arr) {
+        buildMaxHead(arr, arr.length);
+    }
+
+    private void buildMaxHead(int[] arr, int len) {
+        int n = len / 2;
+        for (int i = n; i >= 0; i--) {
+            maxHead2(arr, i, len);
+        }
+    }
+
+    private void maxHead2(int[] arr, int i, int len) {
+        int largest = i;
+        int left = i * 2 + 1;
+        int right = i * 2 + 2;
+        if (left < len && arr[left] > arr[largest]) {
+            largest = left;
+        }
+        if (right < len && arr[right] > arr[largest]) {
+            largest = right;
+        }
+        if (largest != i) {
+            swap(arr, largest, i);
+            maxHead2(arr, largest, len); // 被交换的位置需要重新一次交换
+        }
     }
 
 
