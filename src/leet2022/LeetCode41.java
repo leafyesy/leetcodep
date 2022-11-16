@@ -13,12 +13,12 @@ public class LeetCode41 {
         int[] arr3 = new int[]{7, 8, 9, 11, 12};
         int[] arr4 = new int[]{3, 4, -1, 1};
         int[] arr5 = new int[]{1};
-        int result = new LeetCode41().firstMissingPositive5(arr);
-        int result1 = new LeetCode41().firstMissingPositive5(arr1);
-        int result2 = new LeetCode41().firstMissingPositive5(arr2);
-        int result3 = new LeetCode41().firstMissingPositive5(arr3);
-        int result4 = new LeetCode41().firstMissingPositive5(arr4);
-        int result5 = new LeetCode41().firstMissingPositive5(arr5);
+        int result = new LeetCode41().firstMissingPositive6(arr);
+        int result1 = new LeetCode41().firstMissingPositive6(arr1);
+        int result2 = new LeetCode41().firstMissingPositive6(arr2);
+        int result3 = new LeetCode41().firstMissingPositive6(arr3);
+        int result4 = new LeetCode41().firstMissingPositive6(arr4);
+        int result5 = new LeetCode41().firstMissingPositive6(arr5);
         System.out.println("result:" + result);
         System.out.println("result1:" + result1);
         System.out.println("result2:" + result2);
@@ -142,9 +142,30 @@ public class LeetCode41 {
         int result = 1;
         for (int num : nums) {
             if (num == -1) break;
-            result ++;
+            result++;
         }
         return result;
+    }
+
+
+    public int firstMissingPositive6(int[] nums) {
+        if (nums.length == 0) {
+            return 1;
+        }
+        for (int i = 0; i < nums.length; i++) {
+            while (nums[i] > 0 && nums[i] <= nums.length && nums[i] != nums[nums[i] - 1]) {
+                // 交换位置
+                int temp = nums[nums[i] - 1];
+                nums[nums[i] - 1] = nums[i];
+                nums[i] = temp;
+            }
+        }
+        for (int i = 0; i < nums.length; i++) {
+            if (nums[i] == -1 || nums[i] != i + 1) {
+                return i + 1;
+            }
+        }
+        return nums[nums.length - 1] + 1;
     }
 
 }
