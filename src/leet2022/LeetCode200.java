@@ -70,28 +70,6 @@ public class LeetCode200 {
         System.out.println(result5);
     }
 
-    static class Point {
-        int x, y;
-
-        public Point(int x, int y) {
-            this.x = x;
-            this.y = y;
-        }
-
-        @Override
-        public boolean equals(Object o) {
-            if (this == o) return true;
-            if (o == null || getClass() != o.getClass()) return false;
-            Point point = (Point) o;
-            return x == point.x && y == point.y;
-        }
-
-        @Override
-        public int hashCode() {
-            return Objects.hash(x, y);
-        }
-    }
-
     // 无法解决因为记录的岛屿的个数错误导致的重复计算
     //dp[n][m] = if(v == 0) 0 else 上/左是否有值,如果有就用那个值,如果没有就把当前岛屿数加1,如果遇到都有数字且数字不一致的 需要改成小的
     public int numIslands(char[][] grid) {
