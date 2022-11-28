@@ -58,11 +58,11 @@ public class LeetCode200 {
                 {'0', '1', '0', '0', '1', '0', '0', '1', '1', '1', '1', '1', '1', '0', '1', '0', '1', '1', '1', '1'},
                 {'0', '0', '1', '1', '1', '1', '1', '0', '0', '0', '1', '1', '1', '1', '1', '1', '0', '1', '1', '0'}
         };
-        int result1 = new LeetCode200().numIslands3(arr);
-        int result2 = new LeetCode200().numIslands3(arr2);
-        int result3 = new LeetCode200().numIslands3(arr3);
-        int result4 = new LeetCode200().numIslands3(arr4);
-        int result5 = new LeetCode200().numIslands3(arr5);
+        int result1 = new LeetCode200().numIslands4(arr);
+        int result2 = new LeetCode200().numIslands4(arr2);
+        int result3 = new LeetCode200().numIslands4(arr3);
+        int result4 = new LeetCode200().numIslands4(arr4);
+        int result5 = new LeetCode200().numIslands4(arr5);
         System.out.println(result1);
         System.out.println(result2);
         System.out.println(result3);
@@ -145,6 +145,53 @@ public class LeetCode200 {
             return true;
         }
         return false;
+    }
+
+
+    public int numIslands4(char[][] grid) {
+        int count = 1;
+        int[][] dp = new int[grid.length + 2][grid[0].length + 2]; // 存储哪些点已经被使用了
+        Stack<int[]> cacheStack = new Stack<int[]>();
+        Stack<int[]> tempCacheStack = new Stack<int[]>();
+        for (int i = 0; i < grid.length; i++) {
+            for (int j = 0; j < grid[i].length; j++) {
+                if (grid[i][j] == '1' && dp[i + 1][j + 1] == 0) {
+                    count++;
+                    cacheStack.add(new int[]{i, j});
+                    while (!cacheStack.isEmpty()) {
+                        tempCacheStack.clear();
+                        while (!cacheStack.isEmpty()) {
+                            tempCacheStack.add(cacheStack.pop());
+                        }
+                        for (int[] arr : tempCacheStack) {
+                            int y = arr[0];
+                            int x = arr[1];
+                            int left = x - 1;
+                            int right = x + 1;
+                            int top = y - 1;
+                            int bottom = y + 1;
+                            if (left >= 0 && grid[y][left] == '1' && dp[y + 1][left + 1] == 0) {
+                                cacheStack.add(new int[]{y, left});
+                                dp[y + 1][left + 1] = 1;
+                            }
+                            if (right < grid[y].length && grid[y][right] == '1' && dp[y + 1][right + 1] == 0) {
+                                cacheStack.add(new int[]{y, right});
+                                dp[y + 1][right + 1] = 1;
+                            }
+                            if (top >= 0 && grid[top][x] == '1' && dp[top + 1][x + 1] == 0) {
+                                cacheStack.add(new int[]{top, x});
+                                dp[top + 1][x + 1] = 1;
+                            }
+                            if (bottom < grid.length && grid[bottom][x] == '1' && dp[bottom + 1][x + 1] == 0) {
+                                cacheStack.add(new int[]{bottom, x});
+                                dp[bottom + 1][x + 1] = 1;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return count - 1;
     }
 
 
